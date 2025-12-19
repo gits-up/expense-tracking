@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import AddExpenseModal from "../components/AddExpenseModal";
+import AddMember from "../components/AddMember";
 import "../styles/dashboard.css";
 
 export default function GroupDetails() {
@@ -29,6 +30,7 @@ export default function GroupDetails() {
 
   return (
     <div className="dashboard">
+      {/* HEADER */}
       <div className="dashboard-header">
         Group Expenses
         <button className="create-btn" onClick={() => setShowModal(true)}>
@@ -36,6 +38,13 @@ export default function GroupDetails() {
         </button>
       </div>
 
+      {/* ADD MEMBER (THIS WAS MISSING) */}
+      <div className="card">
+        <h4>Add Member</h4>
+        <AddMember groupId={id} onAdded={fetchExpenses} />
+      </div>
+
+      {/* EXPENSE LIST */}
       <div className="card">
         {expenses.length === 0 && <p>No expenses yet</p>}
         {expenses.map((e) => (
@@ -45,6 +54,7 @@ export default function GroupDetails() {
         ))}
       </div>
 
+      {/* ADD EXPENSE MODAL */}
       {showModal && (
         <AddExpenseModal
           groupId={id}

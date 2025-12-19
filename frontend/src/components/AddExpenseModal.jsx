@@ -6,7 +6,6 @@ export default function AddExpenseModal({ groupId, onClose, onAdded }) {
   const [amount, setAmount] = useState("");
 
   const token = localStorage.getItem("token");
-  const userId = JSON.parse(atob(token.split(".")[1])).id;
 
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -21,7 +20,6 @@ export default function AddExpenseModal({ groupId, onClose, onAdded }) {
         groupId,
         description,
         amount: Number(amount),
-        paidBy: userId,
         splitType: "EQUAL",
       },
       { headers }

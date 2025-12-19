@@ -14,8 +14,6 @@ exports.getMyBalances = async (req, res) => {
 
 exports.settleBalance = async (req, res) => {
   const { from, to } = req.body;
-
   await Balance.findOneAndDelete({ from, to });
-
-  res.json({ message: "Balance settled successfully" });
+  res.json({ message: "Balance settled" });
 };

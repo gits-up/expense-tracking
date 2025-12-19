@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
@@ -10,6 +10,7 @@ export default function Dashboard() {
   const [groupName, setGroupName] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem("token");
 
   const headers = {
@@ -17,16 +18,24 @@ export default function Dashboard() {
   };
 
   const fetchData = async () => {
-    const g = await axios.get("http://localhost:5000/api/groups", { headers });
-    setGroups(g.data);
+    try {
+      const g = await axios.get("http://localhost:5000/api/groups", { headers });
+      setGroups(g.data);
 
-    const b = await axios.get("http://localhost:5000/api/balances", { headers });
-    setBalances(b.data);
+      const b = await axios.get(
+        "http://localhost:5000/api/balances",
+        { headers }
+      );
+      setBalances(b.data);
+    } catch (err) {
+      console.error("Dashboard fetch failed", err);
+    }
   };
 
+  // 🔥 THIS IS THE KEY FIX
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [location.pathname]);
 
   const createGroup = async () => {
     if (!groupName.trim()) return;
@@ -53,6 +62,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
+      {/* HEADER */}
       <div className="dashboard-header">
         Dashboard
         <button className="create-btn" onClick={() => setShowModal(true)}>
@@ -110,6 +120,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* CREATE GROUP MODAL */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
